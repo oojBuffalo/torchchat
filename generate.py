@@ -447,14 +447,18 @@ class Generator:
         start_pos: int = 0,
         draft_model: Transformer,
         speculate_k: Optional[int] = 8,
-        sequential_prefill=True,
+        sequential_prefill=True,    
         callback=lambda x: x,
         max_seq_length: int,
+        seed: Optional[int] = None,
         **sampling_kwargs,
     ) -> torch.Tensor:
         """
         Takes a conditioning sequence (prompt) as input and continues to generate as many tokens as requested.
         """
+        if seed:
+            torch.manual_seed(seed)
+            
         is_speculative = draft_model is not None
         device, dtype = prompt.device, prompt.dtype
 
